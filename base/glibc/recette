@@ -62,7 +62,7 @@ compile_pkg () {
     rm -vf $pkgdir/sbin/sln
     rm -vf $pkgdir/usr/bin/rpcinfo
     rm -v $pkgdir/etc/ld.so.cache
-    chmod 644 $pkgdir/lib/gconv/gconv-modules.cache
+    chmod 644 $pkgdir/usr/lib/gconv/gconv-modules.cache
     rm -v $pkgdir/etc/localtime
     rm -rvf $pkgdir/usr/share/zoneinfo
     rm -v $pkgdir/usr/sbin/zdump
