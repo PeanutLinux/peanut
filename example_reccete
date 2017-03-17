@@ -1,0 +1,47 @@
+#!/bin/sh
+
+pkgdir=/tmp/peanut/$pkg-$ver
+src=$(pwd)
+files=$(pwd)/files
+out=/tmp/packages
+
+jobs_fractor=1
+num_cores=$(grep ^processor /proc/cpuinfo | wc -l)
+jobs=$(($num_cores * $jobs_fractor))
+
+pkg=
+ver=
+rel=
+desc=""
+wget_url=""
+
+prepare_env () {
+  mkdir $pkgdir $out
+  cd $src
+  wget $wget_url
+  tar -xvf $pkg-$ver.tar.xz
+}
+
+compile_pkg () {
+    cd $src
+    cd $pkg-$ver
+    make install_root=$pkgdir install -j $jobs
+}
+
+strip_pkg () {
+  find $pkgdir -type f | xargs file | grep "LSB executable" | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+  find $pkgdir -type f | xargs file | grep "shared object" | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+  find $pkgdir -type f | xargs file | grep "current ar archive" | cut -f 1 -d : | xargs strip -g 2> /dev/null || true
+}
+
+generate_pkg () {
+  cd $pkg
+  makepkg -l $out/$pkg-$ver-$rel.tlz
+}
+
+prepare_env
+compile_pkg
+strip_pkg
+generate_pkg
+
+exit 0
