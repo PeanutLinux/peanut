@@ -2,6 +2,7 @@
 
 pkgdir=/tmp/peanut/$pkg-$ver
 src=$(pwd)
+files=$(pwd)/files
 out=/tmp/packages
 
 jobs_fractor=1
