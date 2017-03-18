@@ -31,6 +31,6 @@ build()
                  --disable-libmpx \
                  --disable-libcilkrts \
                  --with-system-zlib
-    make
-    make DESTDIR="$destdir" install
+    make -j${jobs}
+    make DESTDIR="$destdir" install -j${jobs}
 }
