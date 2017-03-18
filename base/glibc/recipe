@@ -1,0 +1,71 @@
+program=glibc
+version=2.25
+release=1
+
+tarname=${program}-${version}.tar.gz
+
+src=$(pwd)
+
+fetch=ftp://ftp.gnu.org/gnu/glibc/$tarname
+
+description="
+This package contains the GNU C libraries and header files.
+The GNU C library was written originally by Roland McGrath, and is currently maintained by Ulrich Drepper.
+Some parts of the library were contributed or worked on by other people.
+You'll need this package to compile programs.
+"
+
+homepage=http://www.gnu.org/software/libc
+license=GPLv2+
+
+build()
+{
+    unpack "${tardir}/$tarname"
+
+    cd "$srcdir"
+
+    export CC="gcc"
+    export CXX="g++"
+    mkdir build
+    cd build
+    ../configure --prefix=/usr                     \
+                 --libexecdir=/usr/lib             \
+                 --with-headers=/usr/include       \
+                 --mandir=/usr/share/man           \
+                 --infodir=/usr/share/info         \
+                 --enable-add-ons                  \
+                 --enable-bind-now                 \
+                 --enable-kernel=2.6.32            \
+                 --enable-obsolete-rpc             \
+                 --enable-stack-protector=strong   \
+                 --without-cvs                     \
+                 --without-gd                      \
+                 --without-selinux                 \
+                 --disable-profile                 \
+                 --disable-werror                  \
+                 --enable-stackguard-randomization \
+                 --enable-lock-elision             \
+                 --build=x86_64-pc-linux-gnu       \
+               libc_cv_slibdir=/lib                \
+               CFLAGS="-O3 -g2 -fasynchronous-unwind-tables -DNDEBUG"
+    make -j${jobs}
+    make install_root="$destdir" install -j${jobs}
+    install -d "$destdir"/var/{db,run}/nscd
+    cp -v ../nscd/nscd.conf "$destdir"/etc/nscd.conf
+    install -d "$destdir"/usr/lib/{locale,systemd/system,tmpfiles.d}
+    install -v -Dm644 ../nscd/nscd.tmpfiles "$destdir"/usr/lib/tmpfiles.d/nscd.conf
+    install -v -Dm644 ../nscd/nscd.service "$destdir"/usr/lib/systemd/system/nscd.service
+    install -m644 ../posix/gai.conf "$destdir"/etc/gai.conf
+    install -m 0644 $src/{ld.so.conf,nsswitch.conf} "$destdir"/etc
+    install -d "$destdir"/etc/{default,ld.so.conf.d}
+    install -p -m644 ../nis/nss "$destdir"/etc/default/nss
+    rm -vf "$destdir"/sbin/sln
+    rm -vf "$destdir"/usr/bin/rpcinfo
+    rm -v "$destdir"/etc/ld.so.cache
+    rm -v "$destdir"/usr/sbin/zdump
+
+# Strip
+  find "$destdir" -type f | xargs file | grep "LSB executable" | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+  find "$destdir" -type f | xargs file | grep "shared object" | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+  find "$destdir" -type f | xargs file | grep "current ar archive" | cut -f 1 -d : | xargs strip -g 2> /dev/null || true
+}
