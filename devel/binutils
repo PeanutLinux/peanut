@@ -1,0 +1,22 @@
+program=binutils
+version=2.28
+release=1
+
+tarname=${program}-${version}.tar.bz2
+
+fetch=http://ftp.gnu.org/gnu/${program}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    ../configure --prefix=/usr       \
+                 --enable-gold       \
+                 --enable-ld=default \
+                 --enable-plugins    \
+                 --enable-shared     \
+                 --disable-werror    \
+                 --with-system-zlib
+    make tooldir=/usr
+    make tooldir=/usr DESTDIR="$destdir" install
+}
