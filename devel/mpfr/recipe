@@ -14,8 +14,8 @@ build()
                 --disable-static     \
                 --enable-thread-safe \
                 --docdir=/usr/share/doc/${program}-${version}
-    make
-    make html
-    make DESTDIR="$destdir" install
-    make DESTDIR="$destdir" install-html
+    make -j${jobs}
+    make html -j${jobs}
+    make DESTDIR="$destdir" install -j${jobs}
+    make DESTDIR="$destdir" install-html -j${jobs}
 }
