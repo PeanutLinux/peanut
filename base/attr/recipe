@@ -1,0 +1,20 @@
+program=attr
+version=2.4.47
+release=1
+
+tarname=${program}-${version}.src.tar.gz
+
+fetch=http://download.savannah.gnu.org/releases/${program}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    ./configure --prefix=/usr \
+                --disable-static
+    make
+    make DESTDIR="$destdir" install install-dev install-lib
+    chmod -v 755 "$destdir"/usr/lib/libattr.so
+    mv -v "$destdir"/usr/lib/libattr.so.* "$destdir"/lib
+    ln -sfv "$destdir"/../lib/$(readlink "$destdir"/usr/lib/libattr.so) "$destdir"/usr/lib/libattr.so
+}
