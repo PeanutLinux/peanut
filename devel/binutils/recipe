@@ -17,6 +17,6 @@ build()
                  --enable-shared     \
                  --disable-werror    \
                  --with-system-zlib
-    make tooldir=/usr
-    make tooldir=/usr DESTDIR="$destdir" install
+    make tooldir=/usr -j${jobs}
+    make tooldir=/usr DESTDIR="$destdir" install -j${jobs}
 }
