@@ -1,5 +1,5 @@
-program=bc
-version=1.06
+program=mpfr
+version=3.1.5
 release=1
 
 tarname=${program}-${version}.tar.xz
