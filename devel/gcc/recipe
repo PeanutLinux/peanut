@@ -14,9 +14,6 @@ build()
     cd       build
     ../configure --prefix=/usr            \
                  --enable-languages=c,c++ \
-                 --libexecdir=/usr/lib \
-                 --mandir=/usr/man \
-                 --infodir=/usr/info \
                  --disable-cloog-version-check \
                  --disable-install-libiberty \
                  --disable-libstdcxx-pch \
