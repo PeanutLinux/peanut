@@ -13,20 +13,23 @@ build()
     mkdir -v build
     cd       build
     ../configure --prefix=/usr            \
-                 --enable-languages=c,c++ \
-                 --disable-cloog-version-check \
-                 --disable-install-libiberty \
-                 --disable-libstdcxx-pch \
-                 --disable-libunwind-exceptions \
-                 --disable-ppl-version-check \
-                 --enable-__cxa_atexit \
-                 --enable-checking=release \
-                 --enable-clocale=gnu \
-                 --enable-cloog-backend=isl \
-                 --enable-languages=c,c++,fortran,go,lto,objc,obj-c++ \
-                 --enable-libstdcxx-time \
-                 --enable-shared \
+                 --libdir=/usr/lib \
+                 --enable-bootstrap \
+                 --enable-languages=c,c++,objc,obj-c++,fortran \
+                 --enable-clocale=generic \
                  --enable-threads=posix \
+                 --enable-tls \
+                 --enable-nls \
+                 --enable-lto \
+                 --enable-libstdcxx-time \
+                 --enable-checking=release \
+                 --disable-libitm \
+                 --disable-gnu-indirect-function \
+                 --disable-libstdcxx-pch \
+                 --disable-libmudflap \
+                 --disable-libsanitizer \
+                 --disable-libmpx \
+                 --disable-libcilkrts \
                  --with-system-zlib
     make
     make DESTDIR="$destdir" install
