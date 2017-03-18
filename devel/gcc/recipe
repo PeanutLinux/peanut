@@ -1,0 +1,22 @@
+program=gcc
+version=6.3.0
+release=1
+
+tarname=${program}-${version}.tar.bz2
+
+fetch=http://ftp.gnu.org/gnu/${program}/${program}-${version}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    mkdir -v build
+    cd       build
+    ../configure --prefix=/usr            \
+                 --enable-languages=c,c++ \
+                 --disable-multilib       \
+                 --disable-bootstrap      \
+                 --with-system-zlib
+    make
+    make DESTDIR="$destdir" install
+}
