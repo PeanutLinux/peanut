@@ -1,0 +1,26 @@
+
+program=ncurses
+version=6.0
+release=1
+
+tarname=${program}-${version}.tar.gz
+
+fetch=http://ftp.gnu.org/gnu/${program}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    ./configure --prefix=/usr           \
+                --with-shared           \
+                --without-debug         \
+                --without-normal        \
+                --enable-pc-files       \
+                --enable-widec
+    make
+    make DESTDIR="$destdir" install
+    mv -v "$destdir"/usr/lib/libncursesw.so.6* "$destdir"/lib
+    ln -sfv "$destdir"/../lib/$(readlink "$destdir"/usr/lib/libncursesw.so) "$destdir"/usr/lib/libncursesw.so
+    mkdir -v "$destdir"/usr/share/doc/${program}-${version}
+    cp -v -R doc/* "$destdir"/usr/share/doc/${program}-${version}
+}
