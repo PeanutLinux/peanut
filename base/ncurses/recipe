@@ -17,10 +17,6 @@ build()
                 --without-normal        \
                 --enable-pc-files       \
                 --enable-widec
-    make
-    make DESTDIR="$destdir" install
-    mv -v "$destdir"/usr/lib/libncursesw.so.6* "$destdir"/lib
-    ln -sfv "$destdir"/../lib/$(readlink "$destdir"/usr/lib/libncursesw.so) "$destdir"/usr/lib/libncursesw.so
-    mkdir -v "$destdir"/usr/share/doc/${program}-${version}
-    cp -v -R doc/* "$destdir"/usr/share/doc/${program}-${version}
+    make -j${jobs}
+    make DESTDIR="$destdir" install -j${jobs}
 }
