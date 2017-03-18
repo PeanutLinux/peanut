@@ -1,0 +1,29 @@
+program=linux
+version=4.10.3
+release=1
+fullversion=4.10.3
+
+tarname=${program}-${version}.tar.xz
+
+fetch=https://cdn.kernel.org/pub/linux/kernel/v4.x/${tarname}
+
+homepage=http://www.gnu.org/software/libc
+license=GPLv2+
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    mkdir "$destdir"/boot
+    make mrproper
+    make INSTALL_HDR_PATH="$destdir"/usr headers_install
+    find "$destdir"/usr/include \( -name .install -o -name ..install.cmd \) -delete
+    make defconfig
+    make
+    make INSTALL_MOD_PATH="$destdir" modules_install
+    cp -v arch/x86/boot/bzImage "$destdir"/boot/vmlinuz-${fullversion}
+    cp -v System.map "$destdir"/boot/System.map-${fullversion}
+    cp -v .config "$destdir"/boot/config-${fullversion}
+    install -d "$destdir"/usr/share/doc/linux-${fullversion}
+    cp -r Documentation/* "$destdir"/usr/share/doc/linux-${fullversion}
+}
