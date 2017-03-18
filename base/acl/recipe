@@ -12,9 +12,6 @@ build()
     cd "$srcdir"
     ./configure --prefix=/usr \
                 --disable-static
-    make
-    make DESTDIR="$destdir" install install-dev install-lib
-    chmod -v 755 "$destdir"/usr/lib/libacl.so
-    mv -v"$destdir" /usr/lib/libacl.so.* "$destdir"/lib
-    ln -sfv "$destdir"/../lib/$(readlink "$destdir"/usr/lib/libacl.so) "$destdir"/usr/lib/libacl.so
+    make -j${jobs}
+    make DESTDIR="$destdir" install install-dev install-lib -j${jobs}
 }
