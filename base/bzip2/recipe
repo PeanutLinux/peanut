@@ -1,0 +1,15 @@
+program=bzip2
+version=1.0.6
+release=1
+
+tarname=${program}-${version}.tar.gz
+
+fetch=http://www.bzip.org/${version}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    make
+    make PREFIX="$destdir"/usr install
+}
