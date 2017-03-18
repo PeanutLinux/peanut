@@ -1,0 +1,16 @@
+program=m4
+version=1.4.18
+release=1
+
+tarname=${program}-${version}.tar.xz
+
+fetch=http://ftp.gnu.org/gnu/${program}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    ./configure --prefix=/usr
+    make
+    make DESTDIR="$destdir" install
+}
