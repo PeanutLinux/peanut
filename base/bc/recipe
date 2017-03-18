@@ -1,0 +1,17 @@
+program=bc
+version=1.06
+release=1
+
+tarname=${program}-${version}.tar.gz
+
+fetch=http://ftp.gnu.org/gnu/${program}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    ./configure --prefix=/usr           \
+                --with-readline
+    make
+    make DESTDIR="$destdir" install
+}
