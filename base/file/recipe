@@ -1,0 +1,16 @@
+program=file
+version=5.30
+release=1
+
+tarname=${program}-${version}.tar.gz
+
+fetch=ftp://ftp.astron.com/pub/${program}/${tarname}
+
+build()
+{
+    unpack "${tardir}/$tarname"
+    cd "$srcdir"
+    ./configure --prefix=/usr
+    make
+    make DESTDIR="$destdir" install
+}
