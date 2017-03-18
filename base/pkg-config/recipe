@@ -15,6 +15,6 @@ build()
                 --disable-compile-warnings \
                 --disable-host-tool        \
                 --docdir=/usr/share/doc/${program}-${version}
-    make
-    make DESTDIR="$destdir" install
+    make -j${jobs}
+    make DESTDIR="$destdir" install -j${jobs}
 }
