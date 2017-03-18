@@ -7,9 +7,6 @@ tarname=${program}-${version}.tar.xz
 
 fetch=https://cdn.kernel.org/pub/linux/kernel/v4.x/${tarname}
 
-homepage=http://www.gnu.org/software/libc
-license=GPLv2+
-
 build()
 {
     unpack "${tardir}/$tarname"
