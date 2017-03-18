@@ -11,8 +11,6 @@ build()
     unpack "${tardir}/$tarname"
     cd "$srcdir"
     ./configure --prefix=/usr
-    make
-    make DESTDIR="$destdir" install
-    mv -v "$destdir"/usr/lib/libz.so.* "$destdir"/lib
-    ln -sfv "$destdir"/../lib/$(readlink "$destdir"/usr/lib/libz.so) "$destdir"/usr/lib/libz.so
+    make -j${jobs}
+    make DESTDIR="$destdir" install -j${jobs}
 }
