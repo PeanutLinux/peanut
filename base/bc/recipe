@@ -12,6 +12,6 @@ build()
     cd "$srcdir"
     ./configure --prefix=/usr           \
                 --with-readline
-    make
-    make DESTDIR="$destdir" install
+    make -j${jobs}
+    make DESTDIR="$destdir" install -j${jobs}
 }
