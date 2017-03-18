@@ -12,12 +12,12 @@ build()
     unpack "${tardir}/$tarname"
     cd "$srcdir"
     mkdir "$destdir"/boot
-    make mrproper
-    make INSTALL_HDR_PATH="$destdir"/usr headers_install
+    make mrproper -j${jobs}
+    make INSTALL_HDR_PATH="$destdir"/usr headers_install -j${jobs}
     find "$destdir"/usr/include \( -name .install -o -name ..install.cmd \) -delete
-    make defconfig
-    make
-    make INSTALL_MOD_PATH="$destdir" modules_install
+    make defconfig -j${jobs}
+    make -j${jobs}
+    make INSTALL_MOD_PATH="$destdir" modules_install -j${jobs}
     cp -v arch/x86/boot/bzImage "$destdir"/boot/vmlinuz-${fullversion}
     cp -v System.map "$destdir"/boot/System.map-${fullversion}
     cp -v .config "$destdir"/boot/config-${fullversion}
